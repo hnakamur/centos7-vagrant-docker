@@ -4,15 +4,23 @@
 # Thanks for a nice script!
 
 # Download the binary & set the permissions
-curl -L https://get.docker.com/builds/Linux/x86_64/docker-latest > /usr/bin/docker; chmod +x /usr/bin/docker
+if [ ! -f /bin/docker ]; then
+  curl -L -o /bin/docker https://get.docker.com/builds/Linux/x86_64/docker-latest
+  chmod +x /bin/docker
+fi
 
 # Download the systemd files
-curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/init/systemd/docker.service > /usr/lib/systemd/system/docker.service
-curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/init/systemd/docker.socket > /usr/lib/systemd/system/docker.socket
+if [ ! -f /usr/lib/systemd/system/docker.service ]; then
+  curl -L -o /usr/lib/systemd/system/docker.service https://raw.githubusercontent.com/docker/docker/master/contrib/init/systemd/docker.service
+  curl -L -o /usr/lib/systemd/system/docker.socket https://raw.githubusercontent.com/docker/docker/master/contrib/init/systemd/docker.socket
 
-# Enable & start the service
-systemctl enable docker
-systemctl start docker
+  # Enable & start the service
+  systemctl enable docker
+  systemctl start docker
+fi
 
 # Install Fig as well
-curl -L https://github.com/docker/fig/releases/download/1.0.0/fig-`uname -s`-`uname -m` > /usr/bin/fig; chmod +x /usr/bin/fig
+if [ ! -f /bin/fig ]; then
+  curl -L -o /bin/fig https://github.com/docker/fig/releases/download/1.0.0/fig-`uname -s`-`uname -m`
+  chmod +x /bin/fig
+fi
